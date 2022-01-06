@@ -1,13 +1,14 @@
 use cosmos_sdk_proto::cosmos::staking::v1beta1::QueryValidatorsRequest;
-use deep_space::Contact;
+use deep_space::{Address, Contact};
 use std::collections::HashSet;
 use std::time::Duration;
 
 const TIMEOUT: Duration = Duration::from_secs(10);
 
 async fn get_bugged_delegators() {
-    let contact = Contact::new("https://gravitychain.io:9090", TIMEOUT, "gravity").unwrap();
+    let contact = Contact::new("http://localhost:9090", TIMEOUT, "gravity").unwrap();
     let mut validators = contact.get_active_validators().await.unwrap();
+    assert_ne!(validators.len(), 100);
     let v = contact
         .get_validators_list(QueryValidatorsRequest {
             pagination: None,
